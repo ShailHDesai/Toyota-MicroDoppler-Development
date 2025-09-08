@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/Toyota-MicroDoppler-Development/static/css/main.aaeda3be.css",
+    "main.js": "/Toyota-MicroDoppler-Development/static/js/main.400c4a04.js",
+    "static/media/Title_Background.jpg": "/Toyota-MicroDoppler-Development/static/media/Title_Background.2f5ff54085fcf5384540.jpg",
+    "static/media/Login_Background.png": "/Toyota-MicroDoppler-Development/static/media/Login_Background.138010322b10046a1fa8.png",
+    "static/media/LandingPage1.png": "/Toyota-MicroDoppler-Development/static/media/LandingPage1.f22662f9964fa2a2bb6c.png",
+    "static/media/MicroDoppler-Logo1.png": "/Toyota-MicroDoppler-Development/static/media/MicroDoppler-Logo1.b709bf35b8ed42d72ea6.png",
+    "static/media/Advertisement1.png": "/Toyota-MicroDoppler-Development/static/media/Advertisement1.556f9351d587e21d4232.png",
+    "static/media/Stanley_Chein.png": "/Toyota-MicroDoppler-Development/static/media/Stanley_Chein.91be890f781cba90396a.png",
+    "static/media/Yaobin_Chen.png": "/Toyota-MicroDoppler-Development/static/media/Yaobin_Chen.bc3f1ded79f631fe96a8.png",
+    "static/media/Chi-Chih-Chen.png": "/Toyota-MicroDoppler-Development/static/media/Chi-Chih-Chen.50395d53cebb015c99ed.png",
+    "static/media/Toyota.png": "/Toyota-MicroDoppler-Development/static/media/Toyota.0639a2c9b454c8df4ddd.png",
+    "static/media/CSRC.png": "/Toyota-MicroDoppler-Development/static/media/CSRC.10ac1f70f6c47c271d38.png",
+    "static/media/TASI.png": "/Toyota-MicroDoppler-Development/static/media/TASI.528ee8503a2473a7dab8.png",
+    "static/media/Purdue.png": "/Toyota-MicroDoppler-Development/static/media/Purdue.b2be44d26cb742b05853.png",
+    "index.html": "/Toyota-MicroDoppler-Development/index.html",
+    "main.aaeda3be.css.map": "/Toyota-MicroDoppler-Development/static/css/main.aaeda3be.css.map",
+    "main.400c4a04.js.map": "/Toyota-MicroDoppler-Development/static/js/main.400c4a04.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.aaeda3be.css",
+    "static/js/main.400c4a04.js"
+  ]
+}

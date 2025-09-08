@@ -1,0 +1,85 @@
+/* ====== Tokens ====== */
+.mdp-footer{
+  --footer-bg-start:#ffffff;
+  --footer-bg-end:#f8fbff;
+  --footer-fg:#1f2937;
+  --border-weak:#e7ecf4;
+
+  --accent:#56b3ff;
+  --accent-soft:rgba(86,179,255,.55);
+
+  --pill:#eef6ff;
+  --pill-border:#cfe6ff;
+}
+
+@media (prefers-color-scheme: dark){
+  .mdp-footer{
+    --footer-bg-start:#0b1221;
+    --footer-bg-end:#0f162a;
+    --footer-fg:#e5e7eb;
+    --border-weak:rgba(148,163,184,.22);
+    --accent:#7cc7ff;
+    --accent-soft:rgba(124,199,255,.55);
+    --pill:#0f1c35;
+    --pill-border:#22345a;
+  }
+}
+
+/* ====== Shell ====== */
+.mdp-footer{
+  position:relative;
+  width:100%;
+  background:linear-gradient(180deg,var(--footer-bg-start),var(--footer-bg-end));
+  color:var(--footer-fg);
+  border-top:1px solid var(--border-weak);
+  -webkit-font-smoothing:antialiased;
+  font-synthesis-weight:none;
+}
+
+/* Animated 1px accent line */
+.mdp-footer__line{
+  position:absolute; inset:0 auto auto 0;
+  height:1px; width:100%;
+  background:linear-gradient(90deg,transparent 0%,var(--accent) 25%,var(--accent-soft) 50%,var(--accent) 75%,transparent 100%);
+  background-size:200% 100%;
+  animation:mdp-accent-scroll 10s linear infinite;
+  opacity:.9;
+}
+@keyframes mdp-accent-scroll{ 0%{background-position:0% 0} 100%{background-position:-200% 0} }
+@media (prefers-reduced-motion: reduce){ .mdp-footer__line{ animation:none } }
+
+/* ====== Inner ====== */
+.mdp-footer__inner{
+  max-width:1280px;
+  margin:0 auto;
+  padding:14px 20px;
+  min-height:56px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.mdp-footer__inner--center{
+  justify-content:center;       /* center the brand */
+}
+
+/* Brand pill */
+.mdp-footer__brand{
+  display:flex; align-items:center; gap:10px;
+  padding:8px 14px;
+  background:var(--pill);
+  border:1px solid var(--pill-border);
+  border-radius:999px;
+  font-size:.95rem; font-weight:600;
+  color:inherit;
+  white-space:nowrap;
+}
+.mdp-footer .logo-dot{
+  width:8px; height:8px; border-radius:50%;
+  background:radial-gradient(circle at 30% 30%, #8b5cf6, #60a5fa 70%);
+  box-shadow:0 0 10px rgba(96,165,250,.55);
+}
+.mdp-footer .sep{ opacity:.45; }
+.mdp-footer .year{ opacity:.85; font-weight:500; }
+
+/* (Optional) remove spacing of previously-present elements */
+.mdp-footer__nav, .mdp-footer__social, .mdp-footer__top { display:none; }

@@ -1,0 +1,276 @@
+/* =========================================================
+   Login Page — Glassmorphic Card + Neon Border + Aurora Btns
+   (All syntax issues fixed; safe autofill handling)
+========================================================= */
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap");
+
+/* ---------- Tokens ---------- */
+:root {
+  --bg-dark: #0b1221;
+  --glass-bg: rgba(255, 255, 255, 0.08);
+  --line: rgba(255, 255, 255, 0.25);
+
+  --blue: #3b82f6;
+  --violet: #9333ea;
+  --green: #22c55e;
+
+  --shadow-1: 0 10px 25px rgba(0, 0, 0, 0.35);
+  --shadow-2: 0 16px 40px rgba(0, 0, 0, 0.45);
+}
+
+/* ---------- Page ---------- */
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: url("../assets/images/Login_Background.png") center/cover no-repeat;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+.login-page::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+/* ---------- Card ---------- */
+.login-card {
+  position: relative;
+  z-index: 1;
+  width: min(420px, 92vw);
+  padding: 32px 28px;
+  border-radius: 18px;
+  background: var(--glass-bg);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-1);
+  backdrop-filter: blur(12px) saturate(120%);
+  -webkit-backdrop-filter: blur(12px) saturate(120%);
+  animation: fadeIn 0.8s ease;
+  overflow: hidden;
+}
+
+/* Neon animated border */
+.login-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, var(--blue), var(--violet), var(--green));
+  background-size: 200% 200%;
+  animation: borderFlow 6s linear infinite;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+@keyframes borderFlow {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+/* keep children above the ring layer */
+.login-card * {
+  position: relative;
+  z-index: 2;
+}
+
+/* ---------- Header ---------- */
+.login-head {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.login-title {
+  margin: 0 0 6px;
+  color: #fff;
+  font-size: 28px;
+  font-weight: 800;
+}
+.login-sub {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* ---------- Form ---------- */
+.login-form {
+  margin-top: 12px;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+.field-label {
+  color: #eaf2ff;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--line);
+  color: #fff;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+.input::placeholder {
+  color: #cbd5e1;
+}
+.input:focus {
+  border-color: var(--blue);
+  background: rgba(255, 255, 255, 0.16);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+}
+
+/* ---------- Buttons ---------- */
+.actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 10px;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 42px;
+  padding: 0 16px;
+  border-radius: 12px;
+  font-weight: 800;
+  font-size: 14px;
+  color: #fff;
+  border: 1px solid transparent;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+.btn-purple {
+  background: linear-gradient(100deg, #6d28d9, #8b5cf6, #a78bfa);
+}
+.btn-outline {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+.btn-outline:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Aurora glow hover */
+.btn-aurora::before {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  background: radial-gradient(circle at center, rgba(34, 211, 238, 0.35), transparent 70%);
+  filter: blur(20px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.btn-aurora:hover::before {
+  opacity: 1;
+}
+.btn-aurora:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-2);
+}
+.btn-aurora:active {
+  transform: translateY(0);
+}
+
+/* ---------- Footer ---------- */
+.login-footer {
+  margin-top: 16px;
+  text-align: center;
+}
+.link-muted {
+  color: #a5f3fc;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+.link-muted:hover {
+  color: #c084fc;
+  text-shadow: 0 0 6px rgba(192, 132, 252, 0.7);
+}
+
+/* ---------- Animations ---------- */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 420px) {
+  .login-card { padding: 26px 22px; }
+  .actions { flex-direction: column; gap: 8px; }
+}
+
+/* =========================================================
+   Autofill / white box fixes (Chrome/Edge/Safari)
+========================================================= */
+.login-card,
+.login-form {
+  color-scheme: dark;
+}
+.login-form .input,
+.login-form input,
+.input {
+  -webkit-appearance: none;
+  appearance: none;
+  background-clip: padding-box;
+}
+.input:-webkit-autofill,
+.input:-webkit-autofill:hover,
+.input:-webkit-autofill:active {
+  -webkit-text-fill-color: #fff !important;
+  caret-color: #fff;
+  -webkit-box-shadow: 0 0 0 1000px rgba(255, 255, 255, 0.10) inset !important;
+  box-shadow: 0 0 0 1000px rgba(255, 255, 255, 0.10) inset !important;
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  transition: background-color 9999s ease-out 0s !important;
+}
+.input:-webkit-autofill:focus {
+  border-color: var(--blue) !important;
+  -webkit-box-shadow:
+    0 0 0 1000px rgba(255, 255, 255, 0.14) inset,
+    0 0 0 3px rgba(59, 130, 246, 0.30) !important;
+  box-shadow:
+    0 0 0 1000px rgba(255, 255, 255, 0.14) inset,
+    0 0 0 3px rgba(59, 130, 246, 0.30) !important;
+}
+
+/* ---------- Password Eye Icon ---------- */
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.password-wrapper .input {
+  width: 100%;
+  padding-right: 40px;
+}
+.eye-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: #64748b;
+}
+.eye-btn:hover {
+  color: #cbd5e1;
+}

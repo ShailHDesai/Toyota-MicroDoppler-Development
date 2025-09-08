@@ -1,0 +1,17 @@
+/* Keeps footer at the bottom and pages scroll normally */
+.app-shell {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-main {
+  flex: 1 0 auto; /* main grows and pushes footer down */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Optional: ensure page sections don't hide under a fixed header if you use one */
+/*
+.app-main { padding-top: var(--header-height, 0px); }
+*/
