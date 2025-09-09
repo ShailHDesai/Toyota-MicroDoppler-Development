@@ -3,8 +3,8 @@ import "./Header.css";
 import { FaUserCircle, FaBars, FaTimes } from "react-icons/fa";
 import { NavLink, useNavigate } from "react-router-dom";
 
-// ⬇️ Adjust the path if your assets folder differs
-import mdLogo from "../assets/images/MicroDoppler-Logo1.png";
+// ⬇️ Import your new logo
+import headerLogo from "../assets/images/Header_Logo.png";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -24,7 +24,7 @@ export default function Header() {
 
   return (
     <header className={`md-header ${open ? "is-open" : ""}`}>
-      {/* Animated background FX (nodes + texture) */}
+      {/* Animated background FX */}
       <div className="md-header__fx" aria-hidden="true">
         <span className="node n1" />
         <span className="node n2" />
@@ -36,7 +36,7 @@ export default function Header() {
       </div>
 
       <div className="md-header__inner">
-        {/* NEW: MicroDoppler logo pinned to the left edge */}
+        {/* Logo pinned left */}
         <NavLink
           to="/"
           end
@@ -44,13 +44,12 @@ export default function Header() {
           aria-label="Micro-Doppler home"
           onClick={() => setOpen(false)}
         >
-          <img src={mdLogo} alt="Micro-Doppler Project logo" />
+          <img src={headerLogo} alt="Micro-Doppler Project logo" />
         </NavLink>
 
-        {/* Brand text */}
+        {/* Brand text only (no dot) */}
         <NavLink to="/" end className="brand" onClick={() => setOpen(false)}>
-          <span className="brand-dot" aria-hidden="true" />
-          <span className="brand-text">Micro-Doppler Project</span>
+          <span className="brand-text">Micro-Doppler Dataset</span>
         </NavLink>
 
         {/* Mobile toggle */}
@@ -77,7 +76,6 @@ export default function Header() {
               <NavLink to="/contributors">Contributors</NavLink>
             </li>
             <li>
-              {/* Route through login first */}
               <NavLink to="/dataset" onClick={handleDatasetClick}>
                 Dataset
               </NavLink>

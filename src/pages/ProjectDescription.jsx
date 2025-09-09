@@ -1,18 +1,6 @@
 // src/pages/ProjectDescription.jsx
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import "../styles/ProjectDescription.css";
-
-// Hero artwork (re-using your banner)
-import adBanner from "../assets/images/Advertisement1.png";
-
-// Partner logos (same set/order)
-import purdueLogo from "../assets/images/Purdue.png";
-import tasiLogo from "../assets/images/TASI.png";
-import toyotaLogo from "../assets/images/Toyota.png";
-import csrcLogo from "../assets/images/CSRC.png";
-import osuLogo from "../assets/images/OSU.png";
-import eslLogo from "../assets/images/ESL.png";
 
 /** Accessible, lightweight Accordion */
 const Accordion = ({ title, children }) => {
@@ -48,37 +36,9 @@ const ProjectDescription = () => {
       {/* Top gradient bar for subtle brand */}
       <div className="top-gradient" aria-hidden="true" />
 
-      {/* Hero */}
-      <section className="wrapper hero">
-        <div className="hero-copy">
-          <span className="eyebrow">Research Dataset</span>
-          <h1 className="hero-title">
-            Purdue – OSU – Toyota <span>Radar MicroDoppler</span> Dataset
-          </h1>
-          <p className="hero-subtitle">
-            High-fidelity radar signatures across pedestrians, cyclists, e-scooters, and
-            wheelchairs—curated for safety research, perception models, and real-world
-            AV/ADAS scenarios.
-          </p>
-
-          <div className="hero-cta">
-            <Link className="btn btn-primary" to="/dataset">
-              Explore the Dataset
-            </Link>
-            <Link className="btn btn-ghost" to="/research">
-              Read the Paper
-            </Link>
-          </div>
-        </div>
-
-        <figure className="hero-media">
-          <img src={adBanner} alt="MicroDoppler dataset artwork" loading="eager" />
-        </figure>
-      </section>
-
-      {/* Details */}
+      {/* Details only (hero removed) */}
       <section className="wrapper details">
-        <h2 className="section-title">Project Details</h2>
+        <h2 className="section-title">Project Description</h2>
 
         <div className="acc-group">
           <Accordion title="Overview">
@@ -98,19 +58,7 @@ const ProjectDescription = () => {
           </Accordion>
         </div>
       </section>
-
-      {/* Partner Logos */}
-      <section className="logos-band" aria-label="Research Partners">
-        <div className="wrapper logos-grid">
-          <img src={purdueLogo} alt="Purdue University" />
-          <img src={toyotaLogo} alt="Toyota Research & Development" />
-          <img src={osuLogo} alt="The Ohio State University" />
-          <img src={tasiLogo} alt="Transportation & Autonomous Systems Initiative (TASI)" />
-          <img src={csrcLogo} alt="Toyota Collaborative Safety Research Center (CSRC)" />
-          <img src={eslLogo} alt="ElectroScience Laboratory (ESL)" />
-        </div>
-      </section>
-      {/* No local footer here; global site footer will render from App */}
+      {/* No local footer; global site footer renders from App */}
     </main>
   );
 };

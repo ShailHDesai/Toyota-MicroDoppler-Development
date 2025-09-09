@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { FaEye, FaEyeSlash } from "react-icons/fa";   // 👈 added icons
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "../styles/CreateAccount.css";
 
 import landingBg from "../assets/images/LandingPage1.png";
@@ -63,34 +63,24 @@ export default function CreateAccount() {
     e.preventDefault();
     if (!isValid || submitting) return;
     setSubmitting(true);
-
     await new Promise((r) => setTimeout(r, 900));
-
     setSuccess(true);
     setSubmitting(false);
-
     setTimeout(() => navigate("/login", { replace: true }), 1100);
   }
 
   return (
-    <div
-      className="create-page"
-      style={{ backgroundImage: `url(${landingBg})` }}
-    >
-      <div className="mesh-backdrop" aria-hidden />
-      <main className="signup-shell" role="main">
+    <div className="create-page compact" style={{ backgroundImage: `url(${landingBg})` }}>
+      <main className="signup-shell">
         <section className="glass-card aurora-hairline">
           <header className="card-head">
-            <p className="kicker">Create your access</p>
+            <p className="kicker">Create your account</p>
             <h1 className="title">Join the Micro-Doppler dataset community</h1>
-            <p className="lede">
-              One account for exploring curated sessions, scenario-aware filters,
-              and downloadable CSV + image bundles.
-            </p>
+            <p className="lede">One account for scenario filters and downloads.</p>
           </header>
 
           <form className="form-grid" onSubmit={handleSubmit} noValidate>
-            {/* Name row */}
+            {/* Names */}
             <div className="row two">
               <div className="field">
                 <label htmlFor="firstName">First Name</label>
@@ -183,9 +173,7 @@ export default function CreateAccount() {
                   <em className="label">{label}</em>
                 </div>
 
-                <p className="hint">
-                  Use at least 8 characters, with letters and numbers. Symbols improve strength.
-                </p>
+                <p className="hint">8+ chars, letters & numbers.</p>
               </div>
 
               <div className="field">
@@ -216,25 +204,33 @@ export default function CreateAccount() {
               </div>
             </div>
 
-            {/* Reason */}
-            <div className="row one">
+            {/* Reason (kept compact) */}
+            <div className="row two">
               <div className="field">
                 <label htmlFor="reason">Reason for using Dataset</label>
                 <textarea
                   id="reason"
                   name="reason"
                   className="input textarea"
-                  rows={5}
+                  rows={3}
                   value={form.reason}
                   onChange={update}
-                  placeholder="Briefly describe the research or development context, expected usage, and team/project."
+                  placeholder="Brief description of your research / usage."
                   aria-invalid={reasonOk ? "false" : "true"}
                 />
                 <p className={`hint ${reasonOk || !form.reason ? "" : "error"}`}>
-                  {reasonOk
-                    ? "Looks good."
-                    : "Please provide at least 20 characters."}
+                  {reasonOk ? "Looks good." : "Please provide at least 20 characters."}
                 </p>
+              </div>
+
+              {/* Quick help / small checklist to balance height */}
+              <div className="field mini-help">
+                <label className="invisible">Quick tips</label>
+                <ul className="bullets">
+                  <li>Use your organization email</li>
+                  <li>State project / team in Position</li>
+                  <li>Keep reason concise (≥20 chars)</li>
+                </ul>
               </div>
             </div>
 
@@ -242,13 +238,13 @@ export default function CreateAccount() {
             <div className="actions">
               <button
                 type="submit"
-                className="btn btn-primary liquid-aurora"
+                className="btn btn-primary"
                 disabled={!isValid || submitting}
               >
                 {submitting ? "Creating..." : "Create account"}
               </button>
 
-              <Link to="/login" className="btn btn-ghost aurora-green">
+              <Link to="/login" className="btn btn-ghost">
                 I already have an account
               </Link>
             </div>

@@ -252,3 +252,59 @@
   /* Slightly smaller logo on mobile */
   .md-logo img { height: 28px; }
 }
+
+
+
+/* ===== Brand ===== */
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: var(--ink);
+}
+
+/* remove the .brand-dot entirely */
+.brand-dot {
+  display: none;
+}
+
+.brand-text {
+  font-family: "Orbitron", system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: .6px;
+  font-size: 15px;
+  text-transform: uppercase;
+  text-shadow: 0 0 6px rgba(85,200,255,.25);
+}
+
+/* ===== Logo (NEW) ===== */
+.md-logo {
+  display: inline-flex;
+  align-items: center;
+  height: 64px;
+  padding-right: 2px;
+  text-decoration: none;
+}
+
+.md-logo img {
+  height: 44px;            /* was 34px → increased */
+  width: auto;
+  display: block;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+  filter: drop-shadow(0 4px 10px rgba(85,200,255,.35));
+  transition: transform .15s ease, filter .15s ease;
+}
+
+.md-logo:hover img {
+  transform: translateY(-1px) scale(1.03);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 980px) {
+  .md-logo img {
+    height: 36px;          /* was 28px → a bit bigger for small screens */
+  }
+}
