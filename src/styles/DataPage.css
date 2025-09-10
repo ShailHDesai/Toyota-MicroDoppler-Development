@@ -20,7 +20,7 @@
   --shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
 
   /* Actions */
-  --apply: #57C773;
+  --apply: #57c773;
   --apply-dark: #44b465;
   --apply-edge: #2fa45a;
   --danger: #e24949;
@@ -28,22 +28,10 @@
   --danger-bg: #fff1f1;
   --disabled-bg: #eef2f7;
 
-  /* Toggle variants */
-  --yes-bg: #e9f9ef;
-  --yes-border: #76d7a1;
-  --yes-text: #145c2f;
-
-  --no-bg: #ffecec;
-  --no-border: #f1a7a7;
-  --no-text: #7a1f1f;
-
   /* Aurora palette */
-  --au-cyan: #00e5ff;
   --au-blue: #60a5fa;
   --au-teal: #14b8a6;
   --au-green: #22c55e;
-  --au-glow: rgba(56, 189, 248, 0.55);
-  --au-shadow: rgba(16, 185, 129, 0.22);
 
   /* UX accents */
   --accent: #0ea5e9;
@@ -63,7 +51,7 @@
 .data-page.modal-open { overflow: hidden; }
 
 .tool-frame {
-  width: min(1120px, 96vw);
+  width: min(1200px, 96vw);
   margin: 8px auto 12px;
   background: transparent;
 }
@@ -86,7 +74,7 @@
 }
 
 /* ============================== */
-/* Single card + layout           */
+/* Single card + grid layout      */
 /* ============================== */
 .form-card {
   position: relative;
@@ -95,6 +83,9 @@
   border-radius: 10px;
   box-shadow: var(--shadow);
   padding: 10px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(260px, 1fr));
+  gap: 14px;
 }
 .form-card::before {
   content: "";
@@ -106,17 +97,9 @@
   opacity: .5;
 }
 
-/* Two columns inside the single card */
-.two-col {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  align-items: start;
-}
-
-/* Sub-section headings in the card */
+/* Sub-section headings */
 .form-card h2 {
-  margin: 0 0 6px;
+  margin: 2px 0 6px;
   font-weight: 700;
   color: var(--ink-strong);
   font-size: 1em;
@@ -143,11 +126,15 @@
   padding: 2px;
   border-radius: 6px;
 }
-.field label {
+.field-label {
   color: var(--ink-strong);
   font-size: .9em;
   font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
+.help-text,
 .help {
   color: var(--ink-subtle);
   font-size: .85em;
@@ -160,18 +147,9 @@
   box-shadow: inset 2px 0 0 var(--accent), 0 1px 0 rgba(15,23,42,0.02);
 }
 
-/* compact widths on left column */
-.form-card .two-col > div:first-child .input,
-.form-card .two-col > div:first-child select,
-.form-card .two-col > div:first-child .select-trigger,
-.form-card .two-col > div:first-child .vru-trigger {
-  width: auto;
-  min-width: 220px;
-  max-width: 320px;
-}
-
-.input, select, .select-trigger, .vru-trigger {
-  height: 1.9em;
+/* Inputs */
+.input, select {
+  height: 32px;                 /* shorter inputs */
   padding: 0 .55em;
   font-size: .9em;
   border: 1px solid var(--border);
@@ -183,244 +161,104 @@
 .input.input-sm { max-width: 320px; }
 .input.input-xs { max-width: 220px; }
 
-.input:focus, select:focus, .select-trigger:focus, .vru-trigger:focus {
+.input:focus, select:focus {
   border-color: #93c5fd;
   box-shadow: 0 0 0 .22rem var(--ring);
 }
 
-/* VRU trigger (looks like an input) */
-.vru-trigger {
-  display: inline-flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  cursor: pointer;
-  color: var(--ink);
+/* Make left-column controls narrower by default (space efficiency) */
+.form-card > div:nth-child(1) .input,
+.form-card > div:nth-child(1) select {
+  width: auto;
+  min-width: 160px;
+  max-width: 240px;
 }
-.vru-trigger .count-pill {
-  background: #eef2f7;
-  color: #111827;
-  border-radius: 999px;
-  padding: 0 .5em;
-  height: 1.4em;
-  display: inline-flex;
-  align-items: center;
-  font-size: .82em;
-  border: 1px solid var(--border);
-}
-
-/* VRU + Gait row */
-.row-two {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-.span-2 { grid-column: 1 / -1; }
-.gait-field .input { max-width: 260px; }
 
 /* ============================== */
-/* VRU MODAL (window popup)       */
+/* Help tooltip (hover “?”)       */
 /* ============================== */
-.vru-modal {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  display: none;
+.help-wrap {
+  position: relative;
+  display: inline-flex;
+  margin-left: 4px;
+  cursor: help;
+  color: var(--ink-muted);
 }
-.vru-modal[aria-hidden="false"] { display: block; }
-
-.vru-modal__backdrop {
+.help-wrap svg { opacity: .9; }
+.help-card {
   position: absolute;
-  inset: 0;
-  background: rgba(2, 6, 23, 0.45);
-  backdrop-filter: blur(2px);
-}
-
-.vru-modal__panel {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: min(880px, 92vw);
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.25);
-  display: grid;
-  grid-template-rows: auto minmax(0, 1fr) auto;
-}
-
-/* header */
-.vru-modal__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 14px;
-  border-bottom: 1px solid rgba(15,23,42,.08);
-}
-.vru-modal__title {
-  font-weight: 700;
-  font-size: 14px;
-  color: var(--ink-strong);
-}
-
-/* body (scrolls internally) */
-.vru-modal__body {
-  padding: 10px 14px 12px;
-  max-height: min(72vh, 640px);
-  overflow: auto;
-}
-
-/* footer */
-.vru-modal__footer {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;        /* align vertically */
-  gap: 8px;
-  padding: 10px 14px;
-  border-top: 1px solid rgba(15,23,42,.08);
-  background: #fafafa;
-  border-radius: 0 0 12px 12px;
-}
-
-/* Clear button in header — RED */
-.btn-danger {
-  background: #fff;
-  color: var(--danger);
-  border: 1px solid var(--danger);
-  height: 1.9em;
-  padding: 0 .75em;
-  border-radius: 999px;
-  font-weight: 700;
-  font-size: .95em;
-  cursor: pointer;
-}
-.btn-danger:hover {
-  background: var(--danger-bg);
-  color: var(--danger-dark);
-  border-color: var(--danger-dark);
-}
-
-/* (neutral ghost style kept if needed elsewhere) */
-.btn-ghost {
-  background: #f3f4f6;
-  color: #111827;
-  border: 1px solid var(--border);
-  height: 1.9em;
-  padding: 0 .75em;
-  border-radius: 999px;
-  font-weight: 700;
-  font-size: .95em;
-  cursor: pointer;
-}
-.btn-ghost:hover { filter: brightness(0.98); }
-
-/* Modal confirm primary (compact size) */
-.btn-primary {
-  background: linear-gradient(180deg, var(--apply) 0%, #45c276 60%, #38b96f 100%);
-  color: #082c16;
-  border: 1px solid var(--apply-edge);
-  height: 2em;
-  padding: 0 .9em;
+  top: 120%;
+  left: 0;
+  z-index: 20;
+  width: 260px;
+  padding: 8px 10px;
   border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-}
-.btn-primary:hover {
-  background: linear-gradient(180deg, var(--apply-dark) 0%, #3fbf72 60%, #34b36a 100%);
-}
-/* Make the modal's Confirm smaller */
-.vru-modal__footer .btn-primary {
-  height: 1.7em;
-  padding: 0 .6em;
-  font-size: .85em;
-  border-radius: 7px;
+  background: rgba(15,23,42,0.96);
+  color: #eaf2ff;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.35);
+  font-size: 12px;
+  line-height: 1.3;
+  pointer-events: none;
 }
 
-/* Modal Cancel — compact + colored, aligned with Confirm */
-.vru-modal__footer .btn:not(.btn-primary) {
-  background: linear-gradient(180deg, #ffffff 0%, #f7f8fb 100%);
-  border: 1px solid #d1d5db;
-  color: #374151;
-  height: 1.7em;
-  padding: 0 .6em;
-  font-size: .85em;
-  border-radius: 7px;
+/* ============================== */
+/* Icon dropdown (custom select)  */
+/* ============================== */
+.icon-select {
+  position: relative;
+  width: 220px;
+  max-width: 100%;
+  display: inline-block;
 }
-.vru-modal__footer .btn:not(.btn-primary):hover {
-  background: #f3f4f6;
-  border-color: #cbd5e1;
-}
-
-/* grid inside modal */
-.vru-modal .grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr; /* more columns to reduce scroll */
+.icon-select__trigger {
+  width: 100%;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: space-between;
   gap: 10px;
+  padding: 6px 10px !important;
+  min-height: 32px;
 }
-@media (max-width: 880px) {
-  .vru-modal .grid { grid-template-columns: 1fr 1fr; }
+.icon-select__value {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
-@media (max-width: 560px) {
-  .vru-modal .grid { grid-template-columns: 1fr; }
-}
+.icon-select .label { font-size: 14px; }
+.icon-select .muted { opacity: .6; }
+.icon-select .caret { opacity: .7; font-size: 12px; }
 
-/* VRU row reused */
-.vru-row {
+.icon-select__menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0; right: 0;
+  z-index: 30;
+  background: #fff;
+  color: #111827;
   border: 1px solid var(--border);
   border-radius: 10px;
-  padding: 8px;
-  display: grid;
-  grid-template-columns: 22px 1fr auto;
-  column-gap: 8px;
-  align-items: center;
-  background: #fff;
-}
-.vru-row .name {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--ink-strong);
-}
-.vru-icon {
-  width: 20px; height: 20px;
-  display: inline-flex; align-items: center; justify-content: center;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: #f3f4f6;
-  color: #374151;
-}
-
-/* segmented control */
-.seg {
-  display: inline-grid;
-  grid-auto-flow: column;
-  border: 1px solid var(--border);
-  border-radius: 999px;
   overflow: hidden;
-  background: #fff;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.15);
 }
-.seg button {
-  height: 1.6em;
-  padding: 0 .5em;
-  font-size: .8em;
-  border: none;
+.icon-select__item {
+  width: 100%;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
   background: transparent;
+  border: none;
   cursor: pointer;
-  color: var(--ink);
-  white-space: nowrap;
+  font-size: 14px;
 }
-.seg button + button { border-left: 1px solid var(--border); }
-.seg button.on.must { background: var(--yes-bg); color: var(--yes-text); }
-.seg button.on.not  { background: var(--no-bg);  color: var(--no-text); }
+.icon-select__item.is-active {
+  background: rgba(59,130,246,0.08);
+}
 
 /* ============================== */
 /* Constraints                    */
 /* ============================== */
-.constraints-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
 .range-pair .range-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -434,10 +272,11 @@
 /* Bottom actions                 */
 /* ============================== */
 .bottom-actions {
+  grid-column: 1 / -1;          /* span all columns of the grid */
   display: flex;
   justify-content: flex-end;
   gap: 6px;
-  margin-top: 8px;
+  margin-top: 4px;
 }
 
 /* Buttons (shared) */
@@ -445,7 +284,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 2em;
+  height: 34px;
   padding: 0 .75em;
   border-radius: 7px;
   border: 1px solid transparent;
@@ -455,7 +294,7 @@
   position: relative;
   transition: transform .12s, box-shadow .12s, opacity .12s, background-color .12s, border-color .12s;
 }
-.btn-sm { height: 1.9em; padding: 0 .65em; font-size: .85em; border-radius: 6px; }
+.btn-sm { height: 32px; padding: 0 .65em; font-size: .85em; border-radius: 6px; }
 
 .btn[disabled] {
   cursor: not-allowed;
@@ -466,7 +305,7 @@
   transform: none !important;
 }
 
-/* Apply (page footer) */
+/* Apply */
 .btn-apply {
   color: #082c16;
   background: linear-gradient(180deg, var(--apply) 0%, #45c276 60%, #38b96f 100%);
@@ -498,7 +337,7 @@
   box-shadow: 0 0 0 .2rem rgba(87,199,115,.32), 0 6px 16px rgba(87,199,115,.32);
 }
 
-/* Clear (page footer) */
+/* Clear */
 .btn-clear {
   background: #fff;
   color: var(--danger);
@@ -514,6 +353,43 @@
 /* ============================== */
 /* Responsive                     */
 /* ============================== */
-@media (max-width: 980px) {
-  .two-col { grid-template-columns: 1fr; }
+@media (max-width: 1100px) {
+  .form-card { grid-template-columns: repeat(2, minmax(260px, 1fr)); }
+}
+@media (max-width: 720px) {
+  .form-card { grid-template-columns: 1fr; }
+  .bottom-actions { grid-column: auto; }
+}
+
+
+
+/* ============================== */
+/* Force dark text inside inputs on DataPage only */
+.data-page .input,
+.data-page select,
+.data-page textarea {
+  color: var(--ink-strong);
+  -webkit-text-fill-color: var(--ink-strong); /* WebKit */
+  background: #fff;
+}
+
+/* Placeholders readable */
+.data-page .input::placeholder,
+.data-page textarea::placeholder {
+  color: var(--ink-subtle);
+}
+
+/* Autofill (Chrome/Safari) — keep text dark and background white */
+.data-page .input:-webkit-autofill,
+.data-page select:-webkit-autofill,
+.data-page textarea:-webkit-autofill {
+  -webkit-text-fill-color: var(--ink-strong) !important;
+  caret-color: var(--ink-strong);
+  box-shadow: 0 0 0 1000px #fff inset;
+  transition: background-color 9999s ease-out, color 0s;
+}
+
+/* Prefer light form controls */
+.data-page {
+  color-scheme: light;
 }

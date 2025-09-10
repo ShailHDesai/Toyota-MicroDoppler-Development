@@ -17,8 +17,8 @@
 
 /* 🌟 Two-column shell */
 .rpL-shell {
-  --header-h: 80px;
-  --footer-h: 0px;
+  --header-h: 80px;  /* set from JS */
+  --footer-h: 0px;   /* set from JS */
   height: auto;
   max-width: 1200px;
   margin: 0 auto;
@@ -29,69 +29,89 @@
   box-sizing: border-box;
 }
 
-/* LEFT rail – compact */
+/* LEFT rail – titles only (compact, scrollable, sticky) */
 .rpL-aside {
+  position: sticky;
+  top: calc(var(--header-h, 80px) + 8px);
+  align-self: start;
+
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 12px;
   display: grid;
   grid-auto-rows: max-content;
-  gap: 8px;
+  gap: 10px;
   font-size: 13px;
   box-shadow: 0 10px 20px rgba(15,23,42,0.05);
-  height: auto;
+  max-height: calc(100dvh - var(--header-h, 80px) - 24px);
   overflow: auto;
   scrollbar-gutter: stable both-edges;
 }
-.rpL-title { font-size: 16px; font-weight: 700; line-height: 1.25; }
-.rpL-meta { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
-.rpL-meta li span { color: var(--muted); display: block; font-size: 12px; }
-.rpL-meta li strong { font-weight: 600; }
 
-.rpL-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-.rpL-tag { font-size: 11px; padding: 4px 8px; border: 1px solid var(--border); border-radius: 999px; background: #f8fafc; }
-
-.rpL-sub { color: var(--muted); font-size: 12px; }
-.rpL-subrow { display: flex; align-items: center; justify-content: space-between; }
-
-/* PDF link buttons */
-.rpL-pdfs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-.btn-s {
-  appearance: none;
-  border: 1px solid var(--border);
-  background: #ffffff;
-  color: var(--ink);
-  border-radius: 10px;
-  padding: 6px 10px;
-  font-size: 12px;
-  line-height: 1;
-  display: inline-flex;
-  gap: 8px;
-  align-items: center;
-  cursor: pointer;
-  transition: box-shadow .2s, transform .05s;
+.rpL-title {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 0 0 2px 0;
 }
-.btn-s[aria-disabled="true"] { opacity: .5; pointer-events: none; }
-.btn-s:hover { box-shadow: 0 0 0 3px var(--ring); }
-.btn-s:active { transform: translateY(1px); }
-.btn-s.primary { background: #2563eb; color: #fff; border-color: #2563eb; }
-.btn-s.ghost { background: #fff; }
-.btn-s.tiny { padding: 4px 8px; font-size: 11px; }
-.btn-s.ghost.active { outline: 2px solid #2563eb22; }
 
-.rpL-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+/* List of PDF titles */
+.rpL-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
 
-.rpL-code {
-  background: #0f172a;
-  color: #cbd5e1;
-  border-radius: 8px;
-  border: 1px solid rgba(15,23,42,0.2);
-  padding: 10px;
-  font-size: 11px;
-  line-height: 1.35;
-  max-height: 24vh;
-  overflow: auto;
+.rpL-item { margin: 0; }
+
+/* Button-like links for titles */
+.rpL-link {
+  width: 100%;
+  text-align: left;
+  appearance: none;
+  background: #fff;
+  color: var(--ink);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1.1;
+  transition: box-shadow .18s ease, transform .05s ease, border-color .18s ease, background-color .18s ease;
+}
+
+.rpL-link svg { flex: 0 0 auto; opacity: .9; }
+
+.rpL-link:hover {
+  box-shadow: 0 0 0 3px var(--ring);
+}
+
+.rpL-link:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--ring);
+  border-color: #93c5fd;
+}
+
+.rpL-link:active { transform: translateY(1px); }
+
+.rpL-link.active {
+  background: #f3f7ff;
+  border-color: #c7d7fe;
+  box-shadow: inset 3px 0 0 var(--primary);
+}
+
+/* Ellipsis to prevent wrapping */
+.rpL-ellipsis {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* RIGHT viewer area */
@@ -99,8 +119,8 @@
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 12px;
-  height: calc(100dvh - var(--header-h, 80px) - 40px);
-  min-height: 80vh;
+  height: calc(100dvh - var(--header-h, 80px) - var(--footer-h, 0px) - 24px);
+  min-height: 70vh;
   padding: 0;
   overflow: hidden;
   box-shadow: 0 10px 20px rgba(15,23,42,0.05);
@@ -125,6 +145,14 @@
 
 /* Responsive fallback */
 @media (max-width: 1100px) {
-  .rpL-shell { grid-template-columns: 1fr; }
-  .rpL-viewer { height: 70vh; }
+  .rpL-shell {
+    grid-template-columns: 1fr;
+  }
+  .rpL-aside {
+    position: static;
+    max-height: none;
+  }
+  .rpL-viewer {
+    height: 70vh;
+  }
 }
