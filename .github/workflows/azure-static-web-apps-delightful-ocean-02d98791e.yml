@@ -15,19 +15,20 @@ jobs:
     runs-on: ubuntu-latest
     name: Build and Deploy Job
     steps:
+      # Checkout the repo
       - uses: actions/checkout@v3
 
       # Install Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18   # or 20 if your app supports it
+          node-version: 18   # use 20 if your project requires
 
       # Install dependencies
       - name: Install dependencies
         run: npm install
 
-      # Build React app
+      # Build the React app
       - name: Build
         run: npm run build
 
@@ -39,8 +40,8 @@ jobs:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_DELIGHTFUL_OCEAN_02D98791E }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
-          app_location: "/"       # location of package.json
-          output_location: "build" # React build folder
+          app_location: "/"        # folder containing package.json
+          output_location: "build" # React build output folder
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
