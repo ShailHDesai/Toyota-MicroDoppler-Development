@@ -1,5 +1,6 @@
 // src/pages/DataPage.jsx
 import React, { useMemo, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/DataPage.css";
 
 /* ---------- Inline SVG icons ---------- */
@@ -139,6 +140,10 @@ const FieldLabel = ({ children, help }) => (
   </label>
 );
 
+/* ---------- Consistent input style ---------- */
+const INPUT_FONT = 14;
+const INP = { minHeight: 32, fontSize: INPUT_FONT };
+
 /* ---------- Compact icon dropdown (custom select) ---------- */
 function IconSelect({ options, value, onChange, placeholder = "Select..." }) {
   const [open, setOpen] = useState(false);
@@ -161,12 +166,14 @@ function IconSelect({ options, value, onChange, placeholder = "Select..." }) {
           justifyContent: "space-between",
           gap: 10,
           padding: "6px 10px",
-          minHeight: 32,
+          ...INP,
         }}
+        aria-haspopup="listbox"
+        aria-expanded={open}
       >
         <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
           {selected?.icon ? <Icon name={selected.icon} /> : null}
-          <span style={{ fontSize: 14 }}>
+          <span style={{ fontSize: INPUT_FONT }}>
             {selected ? selected.label : <span style={{ opacity: 0.6 }}>{placeholder}</span>}
           </span>
         </span>
@@ -195,6 +202,7 @@ function IconSelect({ options, value, onChange, placeholder = "Select..." }) {
               key={o.value}
               type="button"
               role="option"
+              aria-selected={value === o.value} /* ✅ a11y fix */
               className="input"
               onMouseDown={(e) => e.preventDefault()}
               onClick={() => {
@@ -209,10 +217,11 @@ function IconSelect({ options, value, onChange, placeholder = "Select..." }) {
                 gap: 10,
                 padding: "8px 10px",
                 background: value === o.value ? "rgba(59,130,246,0.08)" : "transparent",
+                fontSize: INPUT_FONT,
               }}
             >
               {o.icon ? <Icon name={o.icon} /> : null}
-              <span style={{ fontSize: 14 }}>{o.label}</span>
+              <span>{o.label}</span>
             </button>
           ))}
         </div>
@@ -267,12 +276,13 @@ const DEFAULTS = {
   pathType: "Straight",
   slope: "0",
   turn: "Right Turn by 90 Degrees",
-  gait: "Paced Walking",
+  gait: "Paced Walking", // internal key kept; label changed in UI
   minInterval: "0.00",
   minTrajLen: "0.00",
   ranges: {
     vruRange: { min: "0", max: "50" },
-    azimuth: { min: "-45", max: "40" },
+    azimuth: { min: "-45", max: "40" },        // shown as "Radar Azimuth Angle"
+    viewingAngle: { min: "-90", max: "90" },   // ✅ new field: VRU Viewing Angle
     velocity: { min: "0", max: "8" },
     rcs: { min: "-25", max: "-5" },
     snr: { min: "5", max: "30" },
@@ -280,6 +290,8 @@ const DEFAULTS = {
 };
 
 export default function DataPage() {
+  const navigate = useNavigate(); /* ✅ used to route to /preview */
+
   const [radarMotion, setRadarMotion] = useState(DEFAULTS.radarMotion);
   const [environment, setEnvironment] = useState(DEFAULTS.environment);
   const [numVRUs, setNumVRUs] = useState(DEFAULTS.numVRUs);
@@ -291,7 +303,7 @@ export default function DataPage() {
   const [vruCategory, setVruCategory] = useState(VRU_CATEGORIES[0].value);
   const [vruSubtype, setVruSubtype] = useState(VRU_CATEGORIES[0].children[0].value);
 
-  const [gait, setGait] = useState(DEFAULTS.gait);
+  const [gait, setGait] = useState(DEFAULTS.gait); // label becomes "More VRU Specifications"
   const [minInterval, setMinInterval] = useState(DEFAULTS.minInterval);
   const [minTrajLen, setMinTrajLen] = useState(DEFAULTS.minTrajLen);
   const [ranges, setRanges] = useState({ ...DEFAULTS.ranges });
@@ -366,12 +378,14 @@ export default function DataPage() {
       slope: showStraightOnly ? parseInt(slope, 10) : null,
       turn: showCurvedOnly ? turn : null,
       vru: { category: vruCategory, subtype: vruSubtype },
-      gait: showGait ? gait : null,
+      moreVruSpecifications: showGait ? gait : null, // renamed in payload for clarity
       minInterval: parseFloat(minInterval),
       minTrajectoryLength: showControlledOnly ? parseFloat(minTrajLen) : null,
       ranges: { ...ranges },
     };
     console.log("Apply Filters ->", payload);
+    /* ✅ route to Preview page; pass login flag to satisfy RequireLoginOnce */
+    navigate("/preview", { state: { fromLogin: true, fromDataset: true, payload } });
   }
 
   // ---------- UI ----------
@@ -407,7 +421,7 @@ export default function DataPage() {
                 className="input input-sm"
                 value={radarMotion}
                 onChange={(e) => setRadarMotion(e.target.value)}
-                style={{ minHeight: 32, width: 180 }}
+                style={{ width: 180, ...INP }}
               >
                 <option>Stationary</option>
                 <option>Moving</option>
@@ -422,7 +436,7 @@ export default function DataPage() {
                 className="input input-sm"
                 value={environment}
                 onChange={(e) => setEnvironment(e.target.value)}
-                style={{ minHeight: 32, width: 200 }}
+                style={{ width: 200, ...INP }}
               >
                 <option>Controlled</option>
                 <option>Naturalistic</option>
@@ -434,7 +448,7 @@ export default function DataPage() {
                 Number of VRUs
               </FieldLabel>
               <input
-                className="input input-xs"
+                className="input input-sm"
                 type="number"
                 inputMode="numeric"
                 min="1"
@@ -442,7 +456,7 @@ export default function DataPage() {
                 placeholder="e.g., 1"
                 value={numVRUs}
                 onChange={(e) => setNumVRUs(e.target.value)}
-                style={{ width: 120 }}
+                style={{ width: 120, ...INP }}
               />
             </div>
 
@@ -455,7 +469,7 @@ export default function DataPage() {
                   className="input input-sm"
                   value={pathType}
                   onChange={(e) => setPathType(e.target.value)}
-                  style={{ minHeight: 32, width: 160 }}
+                  style={{ width: 160, ...INP }}
                 >
                   <option value="Straight">Straight</option>
                   <option value="Curved">Curved</option>
@@ -471,10 +485,10 @@ export default function DataPage() {
                   </span>
                 </FieldLabel>
                 <select
-                  className="input input-xs"
+                  className="input input-sm"
                   value={slope}
                   onChange={(e) => setSlope(e.target.value)}
-                  style={{ width: 120 }}
+                  style={{ width: 120, ...INP }}
                 >
                   {["-45", "0", "45", "90", "135", "180", "225", "270"].map((deg) => (
                     <option key={deg} value={deg}>
@@ -494,7 +508,7 @@ export default function DataPage() {
                   className="input input-sm"
                   value={turn}
                   onChange={(e) => setTurn(e.target.value)}
-                  style={{ minHeight: 32, width: 220 }}
+                  style={{ width: 220, ...INP }}
                 >
                   <option>Right Turn by 90 Degrees</option>
                   <option>Right Turn by 45 Degrees</option>
@@ -505,7 +519,7 @@ export default function DataPage() {
 
           {/* --- Column 2: Scenario B (VRU + Timing) --- */}
           <div style={{ display: "grid", gap: 10 }}>
-            <h2 style={{ margin: "2px 0 6px" }}>VRU & Timing</h2>
+            <h2 style={{ margin: "2px 0 6px" }}>VRU &amp; Timing</h2>
 
             {/* VRU Category */}
             <div className="field">
@@ -534,19 +548,22 @@ export default function DataPage() {
 
             {showGait && (
               <div className="field">
-                <FieldLabel help="Gait pattern is relevant when Pedestrian is selected.">
-                  Gait Type
+                <FieldLabel help="Additional pedestrian-specific attributes.">
+                  {/* ✅ label changed */}
+                  More VRU Specifications
                 </FieldLabel>
                 <select
                   className="input input-sm"
                   value={gait}
                   onChange={(e) => setGait(e.target.value)}
-                  style={{ minHeight: 32, width: 220 }}
+                  style={{ width: 260, ...INP }}
                 >
                   <option>Paced Walking</option>
                   <option>Natural Walking</option>
                   <option>Jogging</option>
                   <option>Irregular Walking</option>
+                  {/* ✅ requested option */}
+                  <option>Moving with Arm Swing</option>
                 </select>
               </div>
             )}
@@ -556,7 +573,7 @@ export default function DataPage() {
                 Minimum Time Interval (s)
               </FieldLabel>
               <input
-                className="input input-xs"
+                className="input input-sm"
                 type="number"
                 inputMode="decimal"
                 min="0"
@@ -564,7 +581,7 @@ export default function DataPage() {
                 placeholder="0.00"
                 value={minInterval}
                 onChange={(e) => setMinInterval(e.target.value)}
-                style={{ width: 120 }}
+                style={{ width: 120, ...INP }}
               />
             </div>
 
@@ -574,7 +591,7 @@ export default function DataPage() {
                   Minimum Trajectory Length (m)
                 </FieldLabel>
                 <input
-                  className="input input-xs"
+                  className="input input-sm"
                   type="number"
                   inputMode="decimal"
                   min="0"
@@ -582,7 +599,7 @@ export default function DataPage() {
                   placeholder="0.00"
                   value={minTrajLen}
                   onChange={(e) => setMinTrajLen(e.target.value)}
-                  style={{ width: 120 }}
+                  style={{ width: 120, ...INP }}
                 />
               </div>
             )}
@@ -599,10 +616,18 @@ export default function DataPage() {
               onChange={(min, max) => setRanges((r) => ({ ...r, vruRange: { min, max } }))}
             />
             <RangePair
-              title="VRU Azimuth Angle (deg)"
-              help="Angle of the VRU relative to radar boresight in the horizontal plane."
+              title="Radar Azimuth Angle (deg)" /* ✅ renamed */
+              help="Angle of the radar boresight relative to the scene in the horizontal plane."
               value={ranges.azimuth}
               onChange={(min, max) => setRanges((r) => ({ ...r, azimuth: { min, max } }))}
+            />
+            <RangePair
+              title="VRU Viewing Angle (deg)" /* ✅ new field */
+              help="VRU facing direction relative to the radar (e.g., torso yaw)."
+              value={ranges.viewingAngle}
+              onChange={(min, max) =>
+                setRanges((r) => ({ ...r, viewingAngle: { min, max } }))
+              }
             />
             <RangePair
               title="VRU Constituent Point Velocity (m/s)"
@@ -640,7 +665,7 @@ export default function DataPage() {
               className="btn btn-sm btn-apply"
               onClick={applyFilters}
               disabled={!canApply}
-              style={{ minHeight: 34, padding: "6px 14px" }}
+              style={{ minHeight: 34, padding: "6px 14px", fontSize: INPUT_FONT }}
             >
               Apply
             </button>
@@ -662,7 +687,7 @@ export default function DataPage() {
                 setRanges({ ...DEFAULTS.ranges });
               }}
               disabled={!canClear}
-              style={{ minHeight: 34, padding: "6px 14px" }}
+              style={{ minHeight: 34, padding: "6px 14px", fontSize: INPUT_FONT }}
             >
               Clear
             </button>
@@ -687,12 +712,12 @@ function RangePair({ title, value, onChange, help }) {
             min
           </div>
           <input
-            className="input input-xs"
+            className="input input-sm"
             type="number"
             step="1"
             value={value.min}
             onChange={(e) => onChange(e.target.value, value.max)}
-            style={{ width: 90 }}
+            style={{ width: 90, ...INP }}
           />
         </div>
         <div className="range-box" style={{ display: "grid", gap: 4 }}>
@@ -700,12 +725,12 @@ function RangePair({ title, value, onChange, help }) {
             max
           </div>
           <input
-            className="input input-xs"
+            className="input input-sm"
             type="number"
             step="1"
             value={value.max}
             onChange={(e) => onChange(value.min, e.target.value)}
-            style={{ width: 90 }}
+            style={{ width: 90, ...INP }}
           />
         </div>
       </div>

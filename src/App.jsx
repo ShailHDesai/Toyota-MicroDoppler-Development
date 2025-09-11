@@ -1,3 +1,4 @@
+// src/App.jsx
 import React from "react";
 import {
   BrowserRouter as Router,
@@ -15,8 +16,10 @@ import ProjectDescription from "./pages/ProjectDescription";
 import ResearchPage from "./pages/ResearchPage";
 import LoginPage from "./pages/LoginPage";
 import DataPage from "./pages/DataPage";
+import PreviewPage from "./pages/PreviewPage";
+import DataLoading from "./pages/DataLoading";       // ✅ NEW
 import CreateAccount from "./pages/CreateAccount";
-import Contributors from "./pages/Contributors"; // 👈 add this import
+import Contributors from "./pages/Contributors";
 import "./styles/AppShell.css";
 
 /* Gate that requires arriving from Login *this time only* */
@@ -38,7 +41,7 @@ function AppShell() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/description" element={<ProjectDescription />} />
           <Route path="/research" element={<ResearchPage />} />
-          <Route path="/contributors" element={<Contributors />} /> {/* 👈 NEW */}
+          <Route path="/contributors" element={<Contributors />} />
 
           {/* Public auth routes */}
           <Route path="/login" element={<LoginPage />} />
@@ -54,7 +57,20 @@ function AppShell() {
             }
           />
 
-          {/* Keep this last */}
+          {/* /preview protected as well */}
+          <Route
+            path="/preview"
+            element={
+              <RequireLoginOnce>
+                <PreviewPage />
+              </RequireLoginOnce>
+            }
+          />
+
+          {/* /loading – user reaches this from Preview's Download button */}
+          <Route path="/loading" element={<DataLoading />} />  {/* ✅ NEW */}
+
+          {/* Fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>

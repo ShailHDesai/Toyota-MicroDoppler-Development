@@ -4,7 +4,7 @@ import { FaUserCircle, FaBars, FaTimes } from "react-icons/fa";
 import { NavLink, useNavigate } from "react-router-dom";
 
 // ⬇️ Import your new logo
-import headerLogo from "../assets/images/Header_Logo.png";
+import headerLogo from "../assets/images/Header_L1.png";
 
 export default function Header() {
   const navigate = useNavigate();
